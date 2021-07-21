@@ -2,6 +2,7 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QMouseEvent>
 
 //Customer defined
 #include "serialportlist.h"
@@ -25,10 +26,27 @@ public:
     void openSerialPort();
     void closeSerialPort();
 
+
+signals:
+    void onLabeltoLineText(QString strText);
+
+public slots:
+    /*Overwrite*/
+    bool eventFilter(QObject* obj, QEvent* evt);
+    void onUpdateLabel(QString strText);
+
 private slots:
     void onNewPortList(QStringList portName);
 
 private:
     Ui::Widget *ui;
+
+protected:
+    virtual void mousePressEvent(QMouseEvent* e);
+    virtual void mouseMoveEvent(QMouseEvent* e);
+    virtual void mouseReleaseEvent(QMouseEvent* e);
+    virtual void mouseDoubleClickEvent(QMouseEvent* event);
+
+    bool m_bIsWindowMoveable;
 };
 #endif // WIDGET_H
