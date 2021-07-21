@@ -1,12 +1,21 @@
 #include "widget.h"
 #include "ui_widget.h"
 #include <QDebug>
+#include <QDesktopWidget>
+#include <QRect>
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
+
+    /*Forms without maxinize and minimize buttons, and title bar*/
+    this->setWindowFlags(windowFlags()|Qt::FramelessWindowHint|Qt::WindowTitleHint);
+    /*Translucent, transparency is 0.8*/
+    this->setWindowOpacity(0.8);
+
+
 
     openSerialPort();
 }
