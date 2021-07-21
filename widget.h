@@ -3,6 +3,10 @@
 
 #include <QWidget>
 
+//Customer defined
+#include "serialportlist.h"
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
 QT_END_NAMESPACE
@@ -14,6 +18,15 @@ class Widget : public QWidget
 public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
+
+    //Customer defined
+    SerialPortList *wPortList;
+
+    void openSerialPort();
+    void closeSerialPort();
+
+private slots:
+    void onNewPortList(QStringList portName);
 
 private:
     Ui::Widget *ui;
