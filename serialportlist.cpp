@@ -1,6 +1,6 @@
 #include <QDebug>
 
-//Customer defined
+//Customized
 #include "serialportlist.h"
 
 // Default constructor, executed each time a new class object is created.
@@ -63,7 +63,7 @@ void SerialPortList::onTimeOut()
     if(newPortStringList.size() != tempPortStringList.size())
     {
         newPortStringList = tempPortStringList;
-        emit onNewSerialPort(newPortStringList);/*Customer defined signal*/
+        emit onNewSerialPort(newPortStringList);/*Customized signal*/
     }
 
 }

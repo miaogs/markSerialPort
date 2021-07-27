@@ -3,9 +3,17 @@
 
 #include <QWidget>
 #include <QMouseEvent>
+#include <QSystemTrayIcon>
+#include <QAction>
+#include <QMenu>
 
-//Customer defined
+//Customized
 #include "serialportlist.h"
+
+#define COMBOBOX_DEFAULT_TEXT  ""
+#define LABEL_DEFAULT_TEXT  "Select"
+
+#define LABEL_NEW_TEXT  "Add Label"
 
 
 QT_BEGIN_NAMESPACE
@@ -20,12 +28,43 @@ public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
 
-    //Customer defined
+    //Customized
+    QMenu *mMenu;
+    QAction *mSettingAction;
+    QAction *mExitAppAction;
+    QAction *mAboutAppAction;
+    QSystemTrayIcon* mSysTrayIcon;
     SerialPortList *wPortList;
+    QString currentSerialPortText;
+    QString currentSerialPortLastText;
+    int insertComboBoxIndex;
+    int insertComboBoxLastIndex;
+
+    struct ShowSettings
+        {
+            QString serialPort;
+            QString labelText;
+            bool lockFlag; /*lock :true  ,not lock :false*/
+
+            ShowSettings(QString s = COMBOBOX_DEFAULT_TEXT, QString l = COMBOBOX_DEFAULT_TEXT, bool f = false)//利用构造函数初始化
+            {
+                serialPort = s;
+                labelText = l;
+                lockFlag = f;
+            }
+        };
+
+    struct Settings
+    {
+        ShowSettings showsettings[2];
+    };
+
+    Settings settings() const;
 
     void openSerialPort();
     void closeSerialPort();
-
+    void createMenu();
+    void createActions();
 
 signals:
     void onLabeltoLineText(QString strText);
@@ -34,12 +73,24 @@ public slots:
     /*Overwrite*/
     bool eventFilter(QObject* obj, QEvent* evt);
     void onUpdateLabel(QString strText);
+    void onSettingAction();
+    void onExitAppAction();
+    void onAboutAppAction();
 
 private slots:
     void onNewPortList(QStringList portName);
+    void onChooseSerialPort(int index);
+    void onChooseSerialPortLast(int index);
+    void onActivatedSysTrayIcon(QSystemTrayIcon::ActivationReason reason);
 
 private:
     Ui::Widget *ui;
+
+    //Customized
+    Settings currentSettings;
+
+    void readSettings();
+    void updateSettings();
 
 protected:
     virtual void mousePressEvent(QMouseEvent* e);
